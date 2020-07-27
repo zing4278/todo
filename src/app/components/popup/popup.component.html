@@ -1,0 +1,61 @@
+<div (click)="toggleShow()">
+  <a href="javascript:void(0)"> + Add another list </a>
+</div>
+<div *ngIf="isShown" class="row container-fluid overlay-container" id="divshow">
+  <div (click)="toggleShow()" class="overlay-dark"></div>
+  <div class="overlay-wrapper">
+    <div class="overlay-pane">
+      <div class="container-inner">
+        <!-- add list popup start -->
+        <div class="row mt-1 m-0">
+          <div class="col-12 col-md-12 p-0 d-flex justify-content-center align-items-center text-light h3" >
+            <form (ngSubmit)="addAnotherList()"  #L="ngForm">
+              <div class="form-group">
+                <label for="nList" class="text-muted col-12 p-0">Enter Name of List</label>
+                <input name="nList" id="nList" nList #nList="ngModel"  [(ngModel)]="newListName" type="text" value="" class="col-7 form-control" required>
+                <button [disabled]="!L.valid" class="col-4 btn btn-light" style="white-space: nowrap; border: 1px solid #e6e6e6;">
+                  Add List
+                </button>
+                <span *ngIf="!nList.valid" class="text-danger"> List Name is mandatory.</span>
+              </div>
+              </form>
+          </div>
+        </div>
+        <!-- end list popup start -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- start the repeate list code -->
+<div cdkdroplistgroup>
+  <div *ngFor="let list of newList; let index = index" class="container">
+    <h2>{{ list.heading }}</h2>
+  <!--   (cdkDropListDropped)="drop($event)"  -->
+    <div cdkDropList  class="list cdk-drop-list" [cdkDropListData]="list">
+      <div class="box" contenteditable="true" *ngFor="let task of list.task; let index = index" cdkDrag>
+        {{ task }}
+        <input (click)="deleteInproTask(list, task)" type="button" value="Delete" class="col-3 btn btn-danger"
+          style="display: none;" />
+      </div>
+      <!-- Tasks added -->
+
+      <!-- add new task in list repeated divisions-->
+      <div class="row mt-1 m-0">
+        <div class="col-12 col-md-12 d-flex justify-content-center p-0 align-items-center text-light h3">
+          <form (ngSubmit)="addTask(list, nTask.value)"  #f="ngForm">
+            <div class="form-group">
+                <input type="text" class="col-7 form-control" #nTask  name="nTask" name="task" id="task"  ngModel  required>
+                  <button class="col-4 btn btn-light" style="white-space: nowrap; border: 1px solid #e6e6e6;">
+                    Add Task
+                  </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- end new task in list repeated divisions -->
+    </div>
+  </div>
+</div>
+
+<!--Tasks added repeated divisions-->
